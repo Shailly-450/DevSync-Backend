@@ -52,6 +52,8 @@ async function seed() {
       title: 'Eco-Tracker Mobile App',
       description: 'A mobile application to track and reduce personal carbon footprint. Built with React Native and Firebase.',
       requiredSkills: ['React Native', 'Firebase', 'JavaScript', 'Mobile UI'],
+      github: 'https://github.com/example/eco-tracker',
+      skills: ['React Native', 'Firebase', 'JavaScript', 'Mobile UI'],
       creator: users[0]._id,
       isPublic: true
     },
@@ -59,6 +61,8 @@ async function seed() {
       title: 'Open Source DataViz Library',
       description: 'A new charting and data visualization library for the web. Looking for contributors passionate about D3 and SVG.',
       requiredSkills: ['D3.js', 'TypeScript', 'SVG', 'Data Visualization'],
+      github: 'https://github.com/example/dataviz-lib',
+      skills: ['D3.js', 'TypeScript', 'SVG', 'Data Visualization'],
       creator: users[1]._id,
       isPublic: true
     },
@@ -66,6 +70,8 @@ async function seed() {
       title: 'AI-Powered Personal Finance Bot',
       description: 'A chatbot that helps users manage their finances using AI-driven insights. Backend in Python.',
       requiredSkills: ['Python', 'Flask', 'NLP', 'Machine Learning'],
+      github: 'https://github.com/example/finance-bot',
+      skills: ['Python', 'Flask', 'NLP', 'Machine Learning'],
       creator: users[0]._id,
       isPublic: true
     },
@@ -73,6 +79,8 @@ async function seed() {
         title: 'Community Health Connect',
         description: 'A web portal to connect local volunteers with healthcare facilities in need. Built with Vue.js and a Rails API.',
         requiredSkills: ['Vue.js', 'Ruby on Rails', 'PostgreSQL', 'CSS'],
+        github: 'https://github.com/example/health-connect',
+        skills: ['Vue.js', 'Ruby on Rails', 'PostgreSQL', 'CSS'],
         creator: users[1]._id,
         isPublic: true
     }
