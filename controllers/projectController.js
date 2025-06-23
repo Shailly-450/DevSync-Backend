@@ -72,3 +72,43 @@ exports.deleteProject = async (req, res) => {
     res.status(500).send('Server Error');
   }
 };
+
+// Get recommended projects for a user
+exports.getRecommendedProjects = async (req, res) => {
+  try {
+    const user = await require('../models/User').findById(req.user.id).lean();
+    if (!user || !user.skills || user.skills.length === 0) {
+      return res.json([]); // Return empty if user has no skills
+    }
+
+    const userSkills = new Set(user.skills.map(s => s.toLowerCase()));
+
+    const projects = await Project.find({
+      creator: { $ne: user._id },
+      members: { $ne: user._id },
+      isPublic: true
+    }).populate('creator', 'name').lean();
+
+    const scoredProjects = projects.map(project => {
+      let matchScore = 0;
+      if (project.requiredSkills && project.requiredSkills.length > 0) {
+        project.requiredSkills.forEach(skill => {
+          if (userSkills.has(skill.toLowerCase())) {
+            matchScore++;
+          }
+        });
+      }
+      return { ...project, matchScore };
+    });
+
+    const recommendedProjects = scoredProjects
+      .filter(p => p.matchScore > 0)
+      .sort((a, b) => b.matchScore - a.matchScore)
+      .slice(0, 5);
+
+    res.json(recommendedProjects);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+};

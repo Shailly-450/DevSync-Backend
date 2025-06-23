@@ -1,39 +1,47 @@
 # DevSync Backend
 
-DevSync is a Node.js + Express + MongoDB backend for a developer collaboration platform. It provides RESTful APIs for user authentication, project management, matchmaking, real-time chat (via Socket.IO), and task tracking.
+DevSync is a comprehensive Node.js + Express + MongoDB backend for a developer collaboration platform. It provides RESTful APIs for user authentication, AI-powered project recommendations, detailed project management, a real-time chat system, and more.
 
-## Features
-- User registration and profiles
-- Project creation and team management
-- Skill-based matchmaking
-- Real-time chat (planned)
-- Kanban-style task management
-- Notifications
+## ✨ Features
+- **User Authentication:** Secure user registration and login using JWT, with support for Google OAuth.
+- **User Profiles:** Manage user profiles with detailed information, including bio, personal skills, and links to GitHub/portfolio.
+- **Project Management:** Full CRUD operations for projects, including title, description, required skills, and GitHub repository URLs.
+- **AI-Powered Recommendations:** A smart recommendation engine that suggests projects to users based on the alignment of their skills with project needs.
+- **Team Management:** Project creators can manage team members and review applications from other users.
+- **Application System:** A complete workflow for users to apply to join projects, and for creators to accept or reject these applications.
+- **Kanban-style Task Board:** Each project has a task board with states like 'To Do', 'In Progress', and 'Done'.
+- **Real-time Chat:** Integrated chat rooms for each project using Socket.IO for instant communication between team members.
+- **Notifications:** A system to notify users of important events (e.g., new applications, accepted requests).
 
-## Tech Stack
-- Node.js, Express
-- MongoDB (Mongoose)
-- RESTful API
+## 🛠 Tech Stack
+- **Node.js & Express** for the server framework.
+- **MongoDB & Mongoose** for the database.
+- **JSON Web Tokens (JWT)** for standard authentication.
+- **Passport.js** for Google OAuth integration.
+- **Socket.IO** for real-time communication.
+- **RESTful API** architecture.
 
-## Setup
-1. Clone the repo
-2. Install dependencies:
-   ```zsh
+## 🚀 Setup
+1. Clone the repo.
+2. Navigate to the `DevSync` directory.
+3. Install dependencies:
+   ```bash
    npm install
    ```
-3. Copy `.env.example` to `.env` and set your MongoDB URI and JWT secret.
-4. Start the server:
-   ```zsh
-   node index.js
+4. Create a `.env` file from the example and add your environment variables (MongoDB URI, JWT Secret, Google Client ID/Secret).
+5. Start the server:
+   ```bash
+   npm start
    ```
 
-## API Endpoints
-- `/api/users` – User registration and listing
-- `/api/projects` – Project CRUD
-- `/api/applications` – Project join requests
-- `/api/tasks` – Task management
-- `/api/notifications` – Notifications
+## 🌐 API Endpoints
+- `/api/auth`: User login and Google authentication.
+- `/api/users`: User registration and profile management (`/me`).
+- `/api/projects`: Full CRUD for projects, including AI-powered recommendations (`/recommendations`).
+- `/api/applications`: Apply to projects and manage applications.
+- `/api/tasks`: Manage tasks for a specific project.
+- `/api/messages`: Real-time chat messaging endpoints.
+- `/api/notifications`: Fetch and manage user notifications.
 
 ---
-
-For more details, see each route file in `/routes` and schema in `/models`.
+Built with collaboration in mind.
