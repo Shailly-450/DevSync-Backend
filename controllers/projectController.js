@@ -30,11 +30,12 @@ exports.getProjectById = async (req, res) => {
 // Create a new project (auth required)
 exports.createProject = async (req, res) => {
   try {
-    const { title, description, requiredSkills, isPublic } = req.body;
+    const { title, description, requiredSkills, githubUrl, isPublic } = req.body;
     const project = new Project({
       title,
       description,
       requiredSkills,
+      githubUrl,
       creator: req.user.id,
       members: [req.user.id],
       isPublic
@@ -60,7 +61,7 @@ exports.deleteProject = async (req, res) => {
       return res.status(401).json({ msg: 'User not authorized' });
     }
 
-    await project.remove();
+    await project.deleteOne();
 
     res.json({ msg: 'Project removed' });
   } catch (err) {

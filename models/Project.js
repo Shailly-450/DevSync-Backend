@@ -5,6 +5,7 @@ const projectSchema = new mongoose.Schema({
   title: { type: String, required: true },
   description: { type: String },
   requiredSkills: [{ type: String }],
+  githubUrl: { type: String }, // GitHub repository URL
   creator: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   members: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
   applications: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Application' }],
