@@ -14,11 +14,33 @@ const applicationActionsRoutes = require('./routes/applicationActionsRoutes');
 
 const app = express();
 
+// Define allowed origins
+const allowedOrigins = [
+  'https://dev-sync-frontend-5dtj28h3j-shailly-yadavs-projects.vercel.app', // Vercel deployment
+  'http://localhost:5174', // Vite dev server
+  'http://localhost:4173', // Vite preview
+  process.env.FRONTEND_URL // From env if different
+].filter(Boolean); // Remove any undefined/null values
+
+// CORS configuration
+const corsOptions = {
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps, Postman, or curl requests)
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      console.log('Blocked by CORS:', origin);
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  exposedHeaders: ['Authorization']
+};
+
 // Middleware
-app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:5173',
-  credentials: true
-}));
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(session({
   secret: process.env.SESSION_SECRET || 'your-secret-key',
@@ -27,6 +49,7 @@ app.use(session({
   cookie: {
     secure: process.env.NODE_ENV === 'production',
     httpOnly: true,
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
     maxAge: 24 * 60 * 60 * 1000 // 24 hours
   }
 }));
@@ -39,7 +62,8 @@ app.get('/health', (req, res) => {
     status: 'OK', 
     message: 'DevSync Backend is running',
     timestamp: new Date().toISOString(),
-    environment: process.env.NODE_ENV || 'development'
+    environment: process.env.NODE_ENV || 'development',
+    allowedOrigins: allowedOrigins // Include allowed origins in health check for debugging
   });
 });
 
@@ -74,7 +98,10 @@ mongoose.connect(process.env.MONGODB_URI, {
 .then(() => {
   console.log('MongoDB connected');
   if (require.main === module) {
-    server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+    server.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+      console.log('Allowed origins:', allowedOrigins);
+    });
   }
 })
 .catch((err) => console.error('MongoDB connection error:', err));
