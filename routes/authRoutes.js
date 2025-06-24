@@ -26,7 +26,7 @@ router.get('/google', passport.authenticate('google', {
 router.get('/google/callback', 
   passport.authenticate('google', { 
     session: false,
-    failureRedirect: `${process.env.FRONTEND_URL || 'http://localhost:5174'}/auth?error=google_login_failed`
+    failureRedirect: process.env.FRONTEND_URL + '/auth?error=google_login_failed'
   }), 
   (req, res) => {
     try {
@@ -42,11 +42,11 @@ router.get('/google/callback',
       );
       
       // Redirect to frontend with token
-      const redirectUrl = `${process.env.FRONTEND_URL || 'http://localhost:5174'}/auth/google/callback?token=${token}`;
+      const redirectUrl = `${process.env.FRONTEND_URL}/auth/google/callback?token=${token}`;
       res.redirect(redirectUrl);
     } catch (error) {
       console.error('Google callback error:', error);
-      res.redirect(`${process.env.FRONTEND_URL || 'http://localhost:5174'}/auth?error=token_generation_failed`);
+      res.redirect(`${process.env.FRONTEND_URL}/auth?error=token_generation_failed`);
     }
   }
 );
