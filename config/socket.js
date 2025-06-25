@@ -1,19 +1,21 @@
 const { Server } = require('socket.io');
 
-function setupSocket(server) {
-  // Define allowed origins (keep in sync with main app)
-  const allowedOrigins = [
-    'https://dev-sync-frontend-5dtj28h3j-shailly-yadavs-projects.vercel.app', // Vercel deployment
-    'http://localhost:5174', // Vite dev server
-    'http://localhost:4173', // Vite preview
-    process.env.FRONTEND_URL // From env if different
-  ].filter(Boolean);
+function isAllowedOrigin(origin) {
+  // Allow localhost, production, and any Vercel preview
+  return (
+    !origin ||
+    origin === 'http://localhost:5174' ||
+    origin === 'http://localhost:4173' ||
+    origin === 'https://dev-sync-frontend-b9dko1538-shailly-yadavs-projects.vercel.app' ||
+    /^https:\/\/dev-sync-frontend-[^.]+-shailly-yadavs-projects\.vercel\.app$/.test(origin)
+  );
+}
 
+function setupSocket(server) {
   const io = new Server(server, {
     cors: {
       origin: function (origin, callback) {
-        // Allow requests with no origin (like mobile apps or Postman)
-        if (!origin || allowedOrigins.includes(origin)) {
+        if (isAllowedOrigin(origin)) {
           callback(null, true);
         } else {
           console.log('Socket.io blocked origin:', origin);

@@ -14,19 +14,20 @@ const applicationActionsRoutes = require('./routes/applicationActionsRoutes');
 
 const app = express();
 
-// Define allowed origins
-const allowedOrigins = [
-  'https://dev-sync-frontend-5dtj28h3j-shailly-yadavs-projects.vercel.app', // Vercel deployment
-  'http://localhost:5174', // Vite dev server
-  'http://localhost:4173', // Vite preview
-  process.env.FRONTEND_URL // From env if different
-].filter(Boolean); // Remove any undefined/null values
+// Allow all Vercel preview URLs, production, and localhost
+function isAllowedOrigin(origin) {
+  return (
+    !origin ||
+    origin === 'http://localhost:5174' ||
+    origin === 'http://localhost:4173' ||
+    origin === 'https://dev-sync-frontend-b9dko1538-shailly-yadavs-projects.vercel.app' ||
+    /^https:\/\/dev-sync-frontend-[^.]+-shailly-yadavs-projects\.vercel\.app$/.test(origin)
+  );
+}
 
-// CORS configuration
 const corsOptions = {
   origin: function (origin, callback) {
-    // Allow requests with no origin (like mobile apps, Postman, or curl requests)
-    if (!origin || allowedOrigins.includes(origin)) {
+    if (isAllowedOrigin(origin)) {
       callback(null, true);
     } else {
       console.log('Blocked by CORS:', origin);
